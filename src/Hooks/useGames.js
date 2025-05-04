@@ -5,6 +5,8 @@ const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function useGames() {
     const [games, setGames] = useState([]);
+    const [game, setGame] = useState(null);
+
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -22,5 +24,13 @@ export default function useGames() {
             });
     }, []);
 
-    return { games, error, isLoading };
+    // Funzione per ottenere un gioco specifico tramite ID
+    const fetchGameById = (id) => {
+        fetch(`${API_URL}/games/${id}`)
+            .then(res => res.json())
+            .then(data => setGame(data.game))
+            .catch(() => setError("Gioco non trovato"));
+    };
+
+    return { games, game, fetchGameById, error, isLoading };
 };
