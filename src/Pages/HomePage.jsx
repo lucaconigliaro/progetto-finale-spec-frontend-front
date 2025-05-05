@@ -1,6 +1,7 @@
 import { useCallback, useContext, useMemo, useState } from "react";
 import GameList from "../Components/GameList";
 import { GlobalContext } from "../Context/GlobalContext";
+import CompareTable from "../Components/CompareTable";
 
 // Funzione debounce
 function debounce(callback, delay) {
@@ -19,8 +20,30 @@ export default function HomePage() {
     const [selectedCategory, setSelectedCategory] = useState("Tutti");
     const [sortBy, setSortBy] = useState("title");
     const [sortOrder, setSortOrder] = useState(1);
+    const [gamesToCompare, setGamesToCompare] = useState([]);
+
+    const API_URL = import.meta.env.VITE_BACKEND_URL;
 
     const debouncedSetSearchQuery = useCallback(debounce(setSearchGame, 1000), []);
+
+    const toggleCompare = async (game) => {
+        const isAlready = gamesToCompare.some(g => g.id === game.id);
+        if (isAlready) {
+            setGamesToCompare((prev) => prev.filter(g => g.id !== game.id));
+        } else if (gamesToCompare.length < 2) {
+            try {
+                const res = await fetch(`${API_URL}/games/${game.id}`);
+                const data = await res.json();
+                setGamesToCompare(prev => [...prev, data.game]);
+            } catch (err) {
+                console.error("Errore nel fetch del gioco:", err);
+            }
+        }
+    };
+
+    const clearCompare = () => {
+        setGamesToCompare([]);
+    };
 
     const handleSort = (field) => {
         if (sortBy === field) {
@@ -93,7 +116,28 @@ export default function HomePage() {
             </div>
 
             <h1>I nostri giochi</h1>
-            <GameList games={filteredAndSortedGames} />
+            <GameList
+                games={filteredAndSortedGames}
+                toggleCompare={toggleCompare}
+                gamesToCompare={gamesToCompare}
+            />
+
+            {gamesToCompare.length > 0 && (
+                <div className="mt-5">
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h2>Confronta i giochi</h2>
+                        <button
+                            className="btn btn-sm "
+                            onClick={clearCompare}
+                        >
+                            Annulla
+                        </button>
+                    </div>
+                    <div className="table-responsive">
+                        <CompareTable games={gamesToCompare} />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
