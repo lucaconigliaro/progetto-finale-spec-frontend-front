@@ -1,6 +1,17 @@
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import GameList from "../Components/GameList";
 import { GlobalContext } from "../Context/GlobalContext";
+
+// Funzione debounce
+function debounce(callback, delay) {
+    let timer;
+    return (value) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            callback(value);
+        }, delay);
+    };
+};
 
 export default function HomePage() {
     const { games, categories } = useContext(GlobalContext);
@@ -8,6 +19,8 @@ export default function HomePage() {
     const [selectedCategory, setSelectedCategory] = useState("Tutti");
     const [sortBy, setSortBy] = useState("title");
     const [sortOrder, setSortOrder] = useState(1);
+
+    const debouncedSetSearchQuery = useCallback(debounce(setSearchGame, 1000), []);
 
     const handleSort = (field) => {
         if (sortBy === field) {
@@ -40,18 +53,13 @@ export default function HomePage() {
         });
     }, [games, searchGame, selectedCategory, sortBy, sortOrder]);
 
-    const handleChange = (e) => {
-        setSearchGame(e.target.value);
-    };
-
     return (
         <div className="container mt-4">
             <div className="d-flex gap-3 mb-4">
                 <input
                     type="text"
                     placeholder="Cerca un gioco..."
-                    onChange={handleChange}
-                    value={searchGame}
+                    onChange={(e) => debouncedSetSearchQuery(e.target.value)}
                     className="form-control w-25"
                 />
 
