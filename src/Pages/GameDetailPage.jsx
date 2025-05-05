@@ -1,19 +1,28 @@
 import { useParams } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 
 export default function GameDetail() {
   const { id } = useParams();
-  const { game, fetchGameById, error } = useContext(GlobalContext);
+  const { fetchGameById } = useContext(GlobalContext);
+  const [game, setGame] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (id) {
-      fetchGameById(id); // Recupero i dettagli del gioco tramite l'ID
-    }
+    const loadGame = async () => {
+      const result = await fetchGameById(id);
+      if (result) {
+        setGame(result);
+      } else {
+        setError("Gioco non trovato");
+      }
+    };
+
+    loadGame();
   }, [id]);
 
   if (error) return <h2>Errore: {error}</h2>;
-  if (!game) return <h2>Gioco non trovato</h2>;
+  if (!game) return <h2>Caricamento in corso...</h2>;
 
   return (
     <div className="card mt-4">
@@ -32,4 +41,4 @@ export default function GameDetail() {
       </div>
     </div>
   );
-};
+}

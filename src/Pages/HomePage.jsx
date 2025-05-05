@@ -15,14 +15,12 @@ function debounce(callback, delay) {
 };
 
 export default function HomePage() {
-    const { games, categories } = useContext(GlobalContext);
+    const { games, categories, fetchGameById } = useContext(GlobalContext);
     const [searchGame, setSearchGame] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Tutti");
     const [sortBy, setSortBy] = useState("title");
     const [sortOrder, setSortOrder] = useState(1);
     const [gamesToCompare, setGamesToCompare] = useState([]);
-
-    const API_URL = import.meta.env.VITE_BACKEND_URL;
 
     const debouncedSetSearchQuery = useCallback(debounce(setSearchGame, 1000), []);
 
@@ -31,12 +29,9 @@ export default function HomePage() {
         if (isAlready) {
             setGamesToCompare((prev) => prev.filter(g => g.id !== game.id));
         } else if (gamesToCompare.length < 2) {
-            try {
-                const res = await fetch(`${API_URL}/games/${game.id}`);
-                const data = await res.json();
-                setGamesToCompare(prev => [...prev, data.game]);
-            } catch (err) {
-                console.error("Errore nel fetch del gioco:", err);
+            const detailedGame = await fetchGameById(game.id);
+            if (detailedGame) {
+                setGamesToCompare(prev => [...prev, detailedGame]);
             }
         }
     };

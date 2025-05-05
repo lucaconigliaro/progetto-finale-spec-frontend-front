@@ -37,12 +37,16 @@ export default function useGames() {
     }, []);
 
     // Funzione per ottenere un gioco specifico tramite ID
-    const fetchGameById = (id) => {
-        fetch(`${API_URL}/games/${id}`)
-            .then(res => res.json())
-            .then(data => setGame(data.game))
-            .catch(() => setError("Gioco non trovato"));
-    };
+    const fetchGameById = async (id) => {
+        try {
+          const res = await fetch(`${API_URL}/games/${id}`);
+          const data = await res.json();
+          return data.game; 
+        } catch (error) {
+          console.error("Errore nel fetch del gioco:", error);
+          return null;
+        }
+      };
 
     return { games, game, fetchGameById, categories, error, isLoading };
 };
