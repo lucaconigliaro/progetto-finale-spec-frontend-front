@@ -25,7 +25,7 @@ export default function GameDetail() {
   if (!game) return <h2>Caricamento in corso...</h2>;
 
   return (
-    <div className="card mt-4">
+    <div className="card mt-2 pt-5 bg-dark text-white">
       <div className="card-body">
         <h2 className="card-title">{game.title}</h2>
         <p><strong>Categoria:</strong> {game.category}</p>

@@ -2,36 +2,40 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function GameCard({ game, toggleCompare, gamesToCompare }) {
-    const isSelected = gamesToCompare.some(g => g.id === game.id);
-    const disableCompare = gamesToCompare.length >= 2 && !isSelected;
+  // Controllo se il gioco è già selezionato
+  const isSelected = gamesToCompare.some(g => g.id === game.id); 
 
-    return (
-        <div className="card shadow-sm border-0" style={{ width: '150px', fontSize: '0.8rem' }}>
-            <div className="card-body d-flex flex-column gap-2 p-2">
-                <strong className="text-truncate" title={game.title}>
-                    {game.title}
-                </strong>
-                <span className="text-muted text-truncate" title={game.category}>
-                    {game.category}
-                </span>
+  // Disabilito il pulsante se ci sono già 2 giochi selezionati e il gioco corrente non è uno di questi
+  const disableCompare = gamesToCompare.length >= 2 && !isSelected; 
 
-                <Link
-                    to={`/games/${game.id}`}
-                    className="btn btn-sm btn-outline-primary"
-                >
-                    Dettagli
-                </Link>
-                <button
-                    className={`btn btn-sm ${isSelected ? "btn-warning" : "btn-outline-warning"}`}
-                    onClick={() => toggleCompare(game)}
-                    disabled={disableCompare && !isSelected}
-                    title={isSelected ? "Rimuovi questo gioco dal confronto" : "Aggiungi al confronto"}
-                >
-                    {isSelected ? "Rimuovi" : "Confronta"}
-                </button>
-            </div>
+  return (
+    <div className="card h-100 border-0 shadow small bg-dark text-white">
+      <div className="card-body p-4 d-flex flex-column text-center">
+        <strong className="text-truncate" title={game.title}>
+          {game.title}
+        </strong>
+        <span className="text-white text-truncate mb-4" title={game.category}>
+          {game.category}
+        </span>
+
+        <div className="mt-auto d-grid gap-2">
+          <Link
+            to={`/games/${game.id}`}
+            className="btn btn-outline-primary btn-sm w-100"
+          >
+            Dettagli
+          </Link>
+          <button
+            className={`btn ${isSelected ? "btn-warning" : "btn-outline-warning"} btn-sm w-100`}
+            onClick={() => toggleCompare(game)}
+            disabled={disableCompare && !isSelected}
+          >
+            {isSelected ? "Rimuovi" : "Confronta"}
+          </button>
         </div>
-    );
-};
+      </div>
+    </div>
+  );
+}
 
-export default React.memo(GameCard);
+export default React.memo(GameCard); // Utilizzo memo per evitare il re-rendering non necessario
