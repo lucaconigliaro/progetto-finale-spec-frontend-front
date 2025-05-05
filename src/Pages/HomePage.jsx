@@ -1,31 +1,91 @@
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import GameList from "../Components/GameList";
 import { GlobalContext } from "../Context/GlobalContext";
 
 export default function HomePage() {
-    const { games } = useContext(GlobalContext);
+    const { games, categories } = useContext(GlobalContext);
     const [searchGame, setSearchGame] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("Tutti");
+    const [sortBy, setSortBy] = useState("title");
+    const [sortOrder, setSortOrder] = useState(1);
+
+    const handleSort = (field) => {
+        if (sortBy === field) {
+            setSortOrder(prev => prev * -1);
+        } else {
+            setSortBy(field);
+            setSortOrder(1);
+        }
+    };
+
+    const sortIcon = sortOrder === 1 ? "↑" : "↓";
+
+    const filteredAndSortedGames = useMemo(() => {
+        let filtered = games.filter(game =>
+            game.title.toLowerCase().includes(searchGame.toLowerCase())
+        );
+
+        if (selectedCategory !== "Tutti") {
+            filtered = filtered.filter(game => game.category === selectedCategory);
+        }
+
+        return filtered.sort((a, b) => {
+            let comparison = 0;
+            if (sortBy === "title") {
+                comparison = a.title.localeCompare(b.title);
+            } else if (sortBy === "category") {
+                comparison = a.category.localeCompare(b.category);
+            }
+            return comparison * sortOrder;
+        });
+    }, [games, searchGame, selectedCategory, sortBy, sortOrder]);
 
     const handleChange = (e) => {
         setSearchGame(e.target.value);
     };
 
-    const filteredGames = games.filter(game =>
-        game.title.toLowerCase().includes(searchGame.toLowerCase())
-    );
-
     return (
         <div className="container mt-4">
-            <input
-                type="text"
-                placeholder="Cerca un gioco..."
-                onChange={handleChange}
-                value={searchGame}
-                className="form-control mb-4"
-            />
+            <div className="d-flex gap-3 mb-4">
+                <input
+                    type="text"
+                    placeholder="Cerca un gioco..."
+                    onChange={handleChange}
+                    value={searchGame}
+                    className="form-control w-25"
+                />
+
+                <select
+                    className="form-select w-25"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                    <option value="Tutti">Tutte le categorie</option>
+                    {categories.map(cat => (
+                        <option key={cat} value={cat}>
+                            {cat}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            <div className="mb-3 d-flex gap-3">
+                <button
+                    onClick={() => handleSort("title")}
+                    className="btn btn-outline-primary"
+                >
+                    Ordina per Titolo {sortBy === "title" && sortIcon}
+                </button>
+                <button
+                    onClick={() => handleSort("category")}
+                    className="btn btn-outline-primary"
+                >
+                    Ordina per Categoria {sortBy === "category" && sortIcon}
+                </button>
+            </div>
 
             <h1>I nostri giochi</h1>
-            <GameList games={filteredGames} />
+            <GameList games={filteredAndSortedGames} />
         </div>
     );
-}
+};
