@@ -5,9 +5,7 @@ const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function useGames() {
     const [games, setGames] = useState([]);
-    const [game, setGame] = useState(null);
     const [categories, setCategories] = useState([]);
-    
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -19,7 +17,7 @@ export default function useGames() {
                 setGames(data);
                 setIsLoading(false);
 
-                // Prendo le categorie uniche
+                // Prendo le categorie
                 const category = [];
                 data.forEach(game => {
                     if (!category.includes(game.category)) {
@@ -36,7 +34,7 @@ export default function useGames() {
             });
     }, []);
 
-    // Funzione per ottenere un gioco specifico tramite ID
+    // Async function per il fetch di un gioco specifico
     const fetchGameById = async (id) => {
         try {
           const res = await fetch(`${API_URL}/games/${id}`);
@@ -48,5 +46,5 @@ export default function useGames() {
         }
       };
 
-    return { games, game, fetchGameById, categories, error, isLoading };
+    return { games, fetchGameById, categories, error, isLoading };
 };

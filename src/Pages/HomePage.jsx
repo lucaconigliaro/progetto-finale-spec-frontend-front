@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import GameList from "../Components/GameList";
 import { GlobalContext } from "../Context/GlobalContext";
 import CompareTable from "../Components/CompareTable";
@@ -21,59 +21,70 @@ export default function HomePage() {
     const [sortBy, setSortBy] = useState("title");
     const [sortOrder, setSortOrder] = useState(1);
     const [gamesToCompare, setGamesToCompare] = useState([]);
+    const compareRef = useRef(null);
 
     const debouncedSetSearchQuery = useCallback(debounce(setSearchGame, 1000), []);
 
+    // Toggle per aggiungere o rimuovere un gioco dalla lista di confronto
     const toggleCompare = async (game) => {
-        const isAlready = gamesToCompare.some(g => g.id === game.id);
+        const isAlready = gamesToCompare.some(g => g.id === game.id); // Controllo se almeno un gioco è già selezionato
         if (isAlready) {
-            setGamesToCompare((prev) => prev.filter(g => g.id !== game.id));
-        } else if (gamesToCompare.length < 2) {
-            const detailedGame = await fetchGameById(game.id);
+            setGamesToCompare(prev => prev.filter(g => g.id !== game.id));  // Se è già selezionato, lo rimuovo
+        } else if (gamesToCompare.length < 2) { // Se non è selezionato e ci sono meno di 2 giochi
+            const detailedGame = await fetchGameById(game.id); 
             if (detailedGame) {
-                setGamesToCompare(prev => [...prev, detailedGame]);
+                setGamesToCompare(prev => [...prev, detailedGame]); // Aggiungo il gioco alla lista di cofronto
             }
         }
     };
 
+    // Funzione per resettare la lista di confronto
     const clearCompare = () => {
         setGamesToCompare([]);
     };
 
+    // Funzione per ordinare i giochi
     const handleSort = (field) => {
-        if (sortBy === field) {
-            setSortOrder(prev => prev * -1);
+        if (sortBy === field) { // Se il campo è uguale a quello selezionato
+            setSortOrder(prev => prev * -1); // Inverto l'ordine
         } else {
-            setSortBy(field);
-            setSortOrder(1);
+            setSortBy(field); // Altrimenti imposto il nuovo campo
+            setSortOrder(1); 
         }
     };
 
-    const sortIcon = sortOrder === 1 ? "↑" : "↓";
-
+    // Funzione per filtrare e ordinare i giochi, useMemo per evitare ricalcoli non necessari
     const filteredAndSortedGames = useMemo(() => {
         let filtered = games.filter(game =>
-            game.title.toLowerCase().includes(searchGame.toLowerCase())
+            game.title.toLowerCase().includes(searchGame.toLowerCase()) // Filtro i giochi in base al titolo
         );
 
         if (selectedCategory !== "Tutti") {
-            filtered = filtered.filter(game => game.category === selectedCategory);
+            filtered = filtered.filter(game => game.category === selectedCategory); // Filtro in base alla categoria
         }
 
+        // Ordinamento dei giochi 
         return filtered.sort((a, b) => {
-            let comparison = 0;
-            if (sortBy === "title") {
-                comparison = a.title.localeCompare(b.title);
-            } else if (sortBy === "category") {
-                comparison = a.category.localeCompare(b.category);
+            let comparison = 0; // Inizializzo la variabile di confronto
+            if (sortBy === "title") { // Se il campo è il titolo
+                comparison = a.title.localeCompare(b.title); // Confronto i titoli
+            } else if (sortBy === "category") { // Se invece il campo è la categoria
+                comparison = a.category.localeCompare(b.category); // Confronto le categorie
             }
-            return comparison * sortOrder;
+            return comparison * sortOrder; // Moltiplico per l'ordine di ordinamento
         });
-    }, [games, searchGame, selectedCategory, sortBy, sortOrder]);
+    }, [games, searchGame, selectedCategory, sortBy, sortOrder]); // Ricalcolo solo quando cambiano questi valori
+
+    // Effetto per scrollare alla sezione di confronto quando ci sono 2 giochi selezionati
+    useEffect(() => {
+        if (gamesToCompare.length === 2 && compareRef.current) {
+            compareRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, [gamesToCompare]);
 
     return (
-        <div className="container mt-4">
-            <div className="d-flex gap-3 mb-4">
+        <div className="container mt-5">
+            <div className="d-flex gap-3 mt-5 pt-5 mb-4">
                 <input
                     type="text"
                     placeholder="Cerca un gioco..."
@@ -93,24 +104,24 @@ export default function HomePage() {
                         </option>
                     ))}
                 </select>
+
             </div>
 
-            <div className="mb-3 d-flex gap-3">
+            <div className="d-flex gap-3 align-items-center flex-wrap">
+                <h1 className="text-white  m-0">I nostri giochi</h1>
                 <button
                     onClick={() => handleSort("title")}
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-primary btn-sm"
                 >
-                    Ordina per Titolo {sortBy === "title" && sortIcon}
+                    Titolo {sortBy === "title" && (sortOrder === 1 ? "A-Z ↑" : "Z-A ↓")}
                 </button>
                 <button
                     onClick={() => handleSort("category")}
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-primary btn-sm"
                 >
-                    Ordina per Categoria {sortBy === "category" && sortIcon}
+                    Categoria {sortBy === "category" && (sortOrder === 1 ? "A-Z ↑" : "Z-A ↓")}
                 </button>
             </div>
-
-            <h1>I nostri giochi</h1>
             <GameList
                 games={filteredAndSortedGames}
                 toggleCompare={toggleCompare}
@@ -118,18 +129,22 @@ export default function HomePage() {
             />
 
             {gamesToCompare.length > 0 && (
-                <div className="mt-5">
+                <div className="mt-5 text-white"
+                    ref={compareRef}>
                     <div className="d-flex justify-content-between align-items-center">
-                        <h2>Confronta i giochi</h2>
+                        <h3>Confronta i giochi</h3>
                         <button
-                            className="btn btn-sm "
+                            className="btn btn-sm text-white"
                             onClick={clearCompare}
                         >
-                            Annulla
+                            Chiudi
                         </button>
                     </div>
                     <div className="table-responsive">
-                        <CompareTable games={gamesToCompare} />
+                        <CompareTable games={gamesToCompare}
+                            removeFromCompare={(id) =>
+                                setGamesToCompare(prev => prev.filter(g => g.id !== id))
+                            } />
                     </div>
                 </div>
             )}

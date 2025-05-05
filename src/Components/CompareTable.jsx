@@ -1,15 +1,21 @@
 import { memo } from "react";
 
-const CompareTable = memo(({ games }) => {
-  if (!games.length) return null;
+const CompareTable = memo(({ games, removeFromCompare }) => {
+  if (!games.length) return null; // Non mostro la tabella se non ci sono giochi da confrontare
 
   return (
-    <table className="table table-bordered table-striped mt-4">
+    <table className="table table-dark table-hover table-bordered table-striped mt-4">
       <thead>
         <tr>
           <th>Gioco</th>
-          {games.map((g) => (
-            <th key={g.id}>{g.title ?? "-"}</th>
+          {games.map(game => (
+            <th key={game.id} className="position-relative">
+              {game.title}
+              <button
+                className="btn-close bg-danger position-absolute top-0 end-0 m-2"
+                onClick={() => removeFromCompare(game.id)}
+              ></button>
+            </th>
           ))}
         </tr>
       </thead>
