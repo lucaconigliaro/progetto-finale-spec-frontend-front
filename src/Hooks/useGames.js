@@ -6,7 +6,8 @@ const API_URL = import.meta.env.VITE_BACKEND_URL;
 export default function useGames() {
     const [games, setGames] = useState([]);
     const [game, setGame] = useState(null);
-
+    const [categories, setCategories] = useState([]);
+    
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -17,6 +18,17 @@ export default function useGames() {
             .then(data => {
                 setGames(data);
                 setIsLoading(false);
+
+                // Prendo le categorie uniche
+                const category = [];
+                data.forEach(game => {
+                    if (!category.includes(game.category)) {
+                        category.push(game.category);
+                    }
+                });
+
+                // Imposto le categorie
+                setCategories(category);
             })
             .catch(err => {
                 setError(err.message);
@@ -32,5 +44,5 @@ export default function useGames() {
             .catch(() => setError("Gioco non trovato"));
     };
 
-    return { games, game, fetchGameById, error, isLoading };
+    return { games, game, fetchGameById, categories, error, isLoading };
 };
