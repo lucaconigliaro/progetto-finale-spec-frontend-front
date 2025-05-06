@@ -7,6 +7,7 @@ export default function GameDetail() {
   const { fetchGameById } = useContext(GlobalContext);
   const [game, setGame] = useState(null);
   const [error, setError] = useState(null);
+  const { addFavorite, removeFavorite, isFavorite } = useContext(GlobalContext);
 
   useEffect(() => {
     const loadGame = async () => {
@@ -23,9 +24,11 @@ export default function GameDetail() {
 
   if (error) return <h2>Errore: {error}</h2>;
   if (!game) return <h2>Caricamento in corso...</h2>;
+  
+  const isFav = isFavorite(game.id);
 
   return (
-    <div className="card mt-2 pt-5 bg-dark text-white">
+    <div className="container card mt-2 pt-5 bg-dark text-white">
       <div className="card-body">
         <h2 className="card-title">{game.title}</h2>
         <p><strong>Categoria:</strong> {game.category}</p>
@@ -39,6 +42,11 @@ export default function GameDetail() {
         <p><strong>Disponibilità:</strong> {game.regionAvailability?.join(", ")}</p>
         <p><strong>Descrizione:</strong> {game.description}</p>
       </div>
+      <div>
+        <button className="btn btn-outline-primary btn-sm mb-3 align-content-center" onClick={() => isFav ? removeFavorite(game.id) : addFavorite(game)} >
+          {isFav ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
+        </button>
+      </div>
     </div>
   );
-}
+};

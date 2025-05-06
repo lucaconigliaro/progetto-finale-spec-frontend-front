@@ -1,4 +1,10 @@
+import { useContext } from "react";
+import { GlobalContext } from "../Context/GlobalContext";
+import { Link } from "react-router-dom";
+
 export default function FavoritesSidebar({ isOpen, onClose }) {
+    const { favorites, removeFavorite } = useContext(GlobalContext);
+    
     return (
         <div>
             {isOpen && (
@@ -28,6 +34,22 @@ export default function FavoritesSidebar({ isOpen, onClose }) {
                     <button type="button" className="btn-close bg-danger" onClick={onClose}></button>
                 </div>
                 <div className="offcanvas-body">
+                    {favorites.length === 0 ? (
+                        <p className="text-white">Nessun gioco nei preferiti.</p>
+                    ) : (
+                        <ul className="list-group list-group-flush">
+                            {favorites.map((game) => (
+                                <li key={game.id} className="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
+                                    <Link to={`/games/${game.id}`} className="text-decoration-none text-white">{game.title}</Link>
+                                    <button
+                                        className="btn-close bg-danger"
+                                        onClick={() => removeFavorite(game.id)}
+                                    >
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
         </div>
