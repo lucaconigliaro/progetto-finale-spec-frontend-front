@@ -15,7 +15,7 @@ function debounce(callback, delay) {
 };
 
 export default function HomePage() {
-    const { games, categories, fetchGameById } = useContext(GlobalContext);
+    const { games, categories, fetchGameById, isLoading, error } = useContext(GlobalContext);
     const [searchGame, setSearchGame] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Tutti");
     const [sortBy, setSortBy] = useState("title");
@@ -85,6 +85,14 @@ export default function HomePage() {
         }
     }, [gamesToCompare]);
 
+    if (isLoading) {
+        return <div className="text-white text-center mt-5 pt-5">Caricamento giochi...</div>;
+      }
+      
+      if (error) {
+        return <div className="text-danger text-center mt-5 pt-5">Errore nel caricamento dei giochi</div>;
+      }
+
     return (
         <div className="container mt-5">
             <div className="d-flex gap-3 mt-5 pt-5 mb-4">
@@ -124,11 +132,15 @@ export default function HomePage() {
                 </button>
             </div>
 
-            <GameList
-                games={filteredAndSortedGames}
-                toggleCompare={toggleCompare}
-                gamesToCompare={gamesToCompare}
-            />
+            {filteredAndSortedGames.length > 0 ? (
+                <GameList
+                    games={filteredAndSortedGames}
+                    toggleCompare={toggleCompare}
+                    gamesToCompare={gamesToCompare}
+                />
+            ) : (
+                <p className="text-white mt-4">Nessun gioco trovato.</p>
+            )}
 
             {gamesToCompare.length > 0 && (
                 <div className="mt-5 text-white" ref={compareRef}>
