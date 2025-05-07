@@ -26,7 +26,7 @@ export default function HomePage() {
     const debouncedSetSearchQuery = useCallback(debounce(setSearchGame, 1000), []);
 
     // Toggle per aggiungere o rimuovere un gioco dalla lista di confronto
-    const toggleCompare = async (game) => {
+    const toggleCompare = useCallback(async (game) => {
         const isAlready = gamesToCompare.some(g => g.id === game.id); // Controllo se almeno un gioco è già selezionato
         if (isAlready) {
             setGamesToCompare(prev => prev.filter(g => g.id !== game.id));  // Se è già selezionato, lo rimuovo
@@ -36,33 +36,36 @@ export default function HomePage() {
                 setGamesToCompare(prev => [...prev, detailedGame]); // Aggiungo il gioco alla lista di cofronto
             }
         }
-    };
+    }, [gamesToCompare, fetchGameById]);
 
     // Funzione per resettare la lista di confronto
-    const clearCompare = () => {
+    const clearCompare = useCallback(() => {
         setGamesToCompare([]);
-    };
+    }, []);
+
+    // Funzione per rimuovere un gioco dalla lista di confronto
+    const removeFromCompare = useCallback(id => {
+        setGamesToCompare(prev => prev.filter(g => g.id !== id));
+    }, []);
 
     // Funzione per ordinare i giochi
-    const handleSort = (field) => {
+    const handleSort = useCallback(field => {
         if (sortBy === field) { // Se il campo è uguale a quello selezionato
             setSortOrder(prev => prev * -1); // Inverto l'ordine
         } else {
             setSortBy(field); // Altrimenti imposto il nuovo campo
             setSortOrder(1); 
         }
-    };
+    }, [sortBy]);
 
     // Funzione per filtrare e ordinare i giochi, useMemo per evitare ricalcoli non necessari
     const filteredAndSortedGames = useMemo(() => {
         let filtered = games.filter(game =>
             game.title.toLowerCase().includes(searchGame.toLowerCase()) // Filtro i giochi in base al titolo
         );
-
         if (selectedCategory !== "Tutti") {
             filtered = filtered.filter(game => game.category === selectedCategory); // Filtro in base alla categoria
         }
-
         // Ordinamento dei giochi 
         return filtered.sort((a, b) => {
             let comparison = 0; // Inizializzo la variabile di confronto
@@ -91,7 +94,6 @@ export default function HomePage() {
                     onChange={(e) => debouncedSetSearchQuery(e.target.value)}
                     className="form-control w-25"
                 />
-
                 <select
                     className="form-select w-25"
                     value={selectedCategory}
@@ -104,11 +106,10 @@ export default function HomePage() {
                         </option>
                     ))}
                 </select>
-
             </div>
 
             <div className="d-flex gap-3 align-items-center flex-wrap">
-                <h1 className="text-white  m-0">I nostri giochi</h1>
+                <h1 className="text-white m-0">I nostri giochi</h1>
                 <button
                     onClick={() => handleSort("title")}
                     className="btn btn-outline-primary btn-sm"
@@ -122,6 +123,7 @@ export default function HomePage() {
                     Categoria {sortBy === "category" && (sortOrder === 1 ? "A-Z ↑" : "Z-A ↓")}
                 </button>
             </div>
+
             <GameList
                 games={filteredAndSortedGames}
                 toggleCompare={toggleCompare}
@@ -129,22 +131,15 @@ export default function HomePage() {
             />
 
             {gamesToCompare.length > 0 && (
-                <div className="mt-5 text-white"
-                    ref={compareRef}>
+                <div className="mt-5 text-white" ref={compareRef}>
                     <div className="d-flex justify-content-between align-items-center">
                         <h3>Confronta i giochi</h3>
-                        <button
-                            className="btn btn-sm text-white"
-                            onClick={clearCompare}
-                        >
+                        <button className="btn btn-sm text-white" onClick={clearCompare}>
                             Chiudi
                         </button>
                     </div>
                     <div className="table-responsive">
-                        <CompareTable games={gamesToCompare}
-                            removeFromCompare={(id) =>
-                                setGamesToCompare(prev => prev.filter(g => g.id !== id))
-                            } />
+                        <CompareTable games={gamesToCompare} removeFromCompare={removeFromCompare} />
                     </div>
                 </div>
             )}
