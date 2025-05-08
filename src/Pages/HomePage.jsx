@@ -12,86 +12,104 @@ function debounce(callback, delay) {
             callback(value);
         }, delay);
     };
-};
+}
 
 export default function HomePage() {
-    const { games, categories, fetchGameById, isLoading, error } = useContext(GlobalContext);
+    const {
+        games,
+        categories,
+        fetchGameById,
+        error,
+        deleteGame,
+        removeFavorite
+    } = useContext(GlobalContext);
+
     const [searchGame, setSearchGame] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("Tutti");
     const [sortBy, setSortBy] = useState("title");
     const [sortOrder, setSortOrder] = useState(1);
     const [gamesToCompare, setGamesToCompare] = useState([]);
+
+    // Riferimento per scrollare alla sezione di confronto
     const compareRef = useRef(null);
 
+    // Debounce per la ricerca giochi
     const debouncedSetSearchQuery = useCallback(debounce(setSearchGame, 1000), []);
 
-    // Toggle per aggiungere o rimuovere un gioco dalla lista di confronto
+    // Aggiungi o rimuovi gioco dalla lista di confronto
     const toggleCompare = useCallback(async (game) => {
-        const isAlready = gamesToCompare.some(g => g.id === game.id); // Controllo se almeno un gioco è già selezionato
+        const isAlready = gamesToCompare.some(g => g.id === game.id);
         if (isAlready) {
-            setGamesToCompare(prev => prev.filter(g => g.id !== game.id));  // Se è già selezionato, lo rimuovo
-        } else if (gamesToCompare.length < 2) { // Se non è selezionato e ci sono meno di 2 giochi
-            const detailedGame = await fetchGameById(game.id); 
-            if (detailedGame) {
-                setGamesToCompare(prev => [...prev, detailedGame]); // Aggiungo il gioco alla lista di cofronto
-            }
+            setGamesToCompare(prev => prev.filter(g => g.id !== game.id));
+        } else if (gamesToCompare.length < 2) {
+            const detailedGame = await fetchGameById(game.id);
+            if (detailedGame) setGamesToCompare(prev => [...prev, detailedGame]);
         }
     }, [gamesToCompare, fetchGameById]);
 
-    // Funzione per resettare la lista di confronto
+    // Svuota la lista di confronto
     const clearCompare = useCallback(() => {
         setGamesToCompare([]);
     }, []);
 
-    // Funzione per rimuovere un gioco dalla lista di confronto
+    // Rimuovi gioco dalla lista di confronto
     const removeFromCompare = useCallback(id => {
         setGamesToCompare(prev => prev.filter(g => g.id !== id));
     }, []);
 
-    // Funzione per ordinare i giochi
+    // Gestisce l'ordinamento dei giochi
     const handleSort = useCallback(field => {
-        if (sortBy === field) { // Se il campo è uguale a quello selezionato
-            setSortOrder(prev => prev * -1); // Inverto l'ordine
+        if (sortBy === field) {
+            setSortOrder(prev => prev * -1);
         } else {
-            setSortBy(field); // Altrimenti imposto il nuovo campo
-            setSortOrder(1); 
+            setSortBy(field);
+            setSortOrder(1);
         }
     }, [sortBy]);
 
-    // Funzione per filtrare e ordinare i giochi, useMemo per evitare ricalcoli non necessari
+    // Filtra e ordina i giochi
     const filteredAndSortedGames = useMemo(() => {
         let filtered = games.filter(game =>
-            game.title.toLowerCase().includes(searchGame.toLowerCase()) // Filtro i giochi in base al titolo
+            game.title.toLowerCase().includes(searchGame.toLowerCase())
         );
-        if (selectedCategory !== "Tutti") {
-            filtered = filtered.filter(game => game.category === selectedCategory); // Filtro in base alla categoria
-        }
-        // Ordinamento dei giochi 
-        return filtered.sort((a, b) => {
-            let comparison = 0; // Inizializzo la variabile di confronto
-            if (sortBy === "title") { // Se il campo è il titolo
-                comparison = a.title.localeCompare(b.title); // Confronto i titoli
-            } else if (sortBy === "category") { // Se invece il campo è la categoria
-                comparison = a.category.localeCompare(b.category); // Confronto le categorie
-            }
-            return comparison * sortOrder; // Moltiplico per l'ordine di ordinamento
-        });
-    }, [games, searchGame, selectedCategory, sortBy, sortOrder]); // Ricalcolo solo quando cambiano questi valori
 
-    // Effetto per scrollare alla sezione di confronto quando ci sono 2 giochi selezionati
+        if (selectedCategory !== "Tutti") {
+            filtered = filtered.filter(game => game.category === selectedCategory);
+        }
+
+        return filtered.sort((a, b) => {
+            let comparison = 0;
+            if (sortBy === "title") comparison = a.title.localeCompare(b.title);
+            else if (sortBy === "category") comparison = a.category.localeCompare(b.category);
+            return comparison * sortOrder;
+        });
+    }, [games, searchGame, selectedCategory, sortBy, sortOrder]);
+
+    // Scrolla alla sezione di confronto se 2 giochi sono selezionati
     useEffect(() => {
         if (gamesToCompare.length === 2 && compareRef.current) {
             compareRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     }, [gamesToCompare]);
 
-    if (isLoading) {
-        return <div className="text-white text-center mt-5 pt-5">Caricamento giochi...</div>;
-      }
-      
-      if (error) {
+    // Modifica gioco
+    const handleEditGame = (game) => {
+        console.log("Modifica il gioco", game);
+    };
+
+    // Elimina gioco
+    const handleDeleteGame = async (id) => {
+        if (window.confirm("Sei sicuro di voler eliminare questo gioco?")) {
+            await deleteGame(id);
+            setGamesToCompare(prev => prev.filter(g => g.id !== id));
+            removeFavorite(id);
+        }
+    };
+
+    // Mostra errore se c'è un problema nel caricamento
+    if (error) {
         return <div className="text-danger text-center mt-5 pt-5">Errore nel caricamento dei giochi</div>;
-      }
+    }
 
     return (
         <div className="container mt-5">
@@ -109,25 +127,17 @@ export default function HomePage() {
                 >
                     <option value="Tutti">Tutte le categorie</option>
                     {categories.map(cat => (
-                        <option key={cat} value={cat}>
-                            {cat}
-                        </option>
+                        <option key={cat} value={cat}>{cat}</option>
                     ))}
                 </select>
             </div>
 
             <div className="d-flex gap-3 align-items-center flex-wrap">
                 <h1 className="text-white m-0">I nostri giochi</h1>
-                <button
-                    onClick={() => handleSort("title")}
-                    className="btn btn-outline-primary btn-sm"
-                >
+                <button onClick={() => handleSort("title")} className="btn btn-outline-primary btn-sm">
                     Titolo {sortBy === "title" && (sortOrder === 1 ? "A-Z ↑" : "Z-A ↓")}
                 </button>
-                <button
-                    onClick={() => handleSort("category")}
-                    className="btn btn-outline-primary btn-sm"
-                >
+                <button onClick={() => handleSort("category")} className="btn btn-outline-primary btn-sm">
                     Categoria {sortBy === "category" && (sortOrder === 1 ? "A-Z ↑" : "Z-A ↓")}
                 </button>
             </div>
@@ -137,6 +147,8 @@ export default function HomePage() {
                     games={filteredAndSortedGames}
                     toggleCompare={toggleCompare}
                     gamesToCompare={gamesToCompare}
+                    onEdit={handleEditGame}
+                    onDelete={handleDeleteGame}
                 />
             ) : (
                 <p className="text-white mt-4">Nessun gioco trovato.</p>
@@ -151,7 +163,10 @@ export default function HomePage() {
                         </button>
                     </div>
                     <div className="table-responsive">
-                        <CompareTable games={gamesToCompare} removeFromCompare={removeFromCompare} />
+                        <CompareTable
+                            games={gamesToCompare}
+                            removeFromCompare={removeFromCompare}
+                        />
                     </div>
                 </div>
             )}
