@@ -7,6 +7,7 @@ export default function NavBar() {
 
     const navLinks = [
         { path: "/", title: "Giochi" },
+        { path:"/add", title: "Aggiungi un gioco"}
     ];
 
     const openSidebar = () => setIsSidebarOpen(true);
