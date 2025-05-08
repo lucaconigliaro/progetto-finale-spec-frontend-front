@@ -1,4 +1,4 @@
-import { useContext, useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { GlobalContext } from "../Context/GlobalContext";
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +31,44 @@ export default function AddGamePage() {
         return "";
     }, [title]);
 
+    const developerError = useMemo(() => {
+        if (!developer.trim()) return "Il nome dello sviluppatore è obbligatorio.";
+        return "";
+    }, [developer]);
+
+    const ratingError = useMemo(() => {
+        const num = Number(rating);
+        if (!rating) return "Il rating è obbligatorio.";
+        if (num < 1 || num > 10) return "Il rating deve essere tra 1 e 10.";
+        return "";
+    }, [rating]);
+
+    const priceError = useMemo(() => {
+        const num = Number(price);
+        if (price === "") return "Il prezzo è obbligatorio.";
+        if (num < 0) return "Il prezzo non può essere negativo.";
+        return "";
+    }, [price]);
+
+    const releaseYearError = useMemo(() => {
+        const year = Number(releaseYear);
+        if (!releaseYear) return "L'anno di uscita è obbligatorio.";
+        if (year < 1970 || year > 2030) return `L'anno deve essere tra 1970 e 2030.`;
+        return "";
+    }, [releaseYear]);
+
+    const descriptionError = useMemo(() => {
+        if (!description.trim()) return "La descrizione è obbligatoria.";
+        return "";
+    }, [description]);
+
+    const ageRatingError = useMemo(() => {
+        if (!ageRating) return "La classificazione PEGI è obbligatoria.";
+        return "";
+    }, [ageRating]);
+
+    const formValid = [titleError, developerError, ratingError, priceError, releaseYearError, descriptionError, ageRatingError].every(err => !err);
+
     const handleCheckboxChange = (value, list, setList) => {
         if (list.includes(value)) {
             setList(list.filter(item => item !== value));
@@ -41,26 +79,23 @@ export default function AddGamePage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (titleError) return;
+        if (!formValid) return;
 
-        if (!description.trim()) {
-            alert("La descrizione non può essere vuota.");
-            return;
-        }
+        const format = (text) => text.trim().replace(/^(\w)/, (_, c) => c.toUpperCase());
 
         const newGame = {
-            title,
+            title: format(title),
             category: category.join(", "),
             platform: platform.join(", "),
             releaseYear: Number(releaseYear),
             rating: Number(rating),
-            developer,
+            developer: format(developer),
             price: Number(price),
             players: players.join(", "),
             ageRating,
-            regionAvailability, 
-            description,
-          };
+            regionAvailability,
+            description: format(description)
+        };
 
         try {
             await addGame(newGame);
@@ -74,10 +109,10 @@ export default function AddGamePage() {
     return (
         <div className="text-white text-center mt-5 pt-5">
             <h1>Aggiungi un nuovo gioco</h1>
-            <form onSubmit={handleSubmit} className="w-75 mx-auto mt-4 text-start">
-                {/* Titolo */}
-                <div className="mb-3">
-                    <label htmlFor="title" className="form-label">Titolo</label>
+            <p className="text-warning">* I campi con l'asterisco sono obbligatori</p>
+            <form onSubmit={handleSubmit} className="w-50 mx-auto mt-4 text-start bg-dark p-4 rounded shadow">
+                <div className="mb-3 w-75">
+                    <label htmlFor="title" className="form-label">Titolo *</label>
                     <input
                         type="text"
                         id="title"
@@ -85,13 +120,12 @@ export default function AddGamePage() {
                         onChange={(e) => setTitle(e.target.value)}
                         className="form-control"
                     />
-                    {titleError && <p className="text-danger">{titleError}</p>}
+                    {titleError && <p className="text-danger m-0 small">{titleError}</p>}
                 </div>
 
-                {/* Categoria */}
-                <div className="mb-3">
+                <div className="mb-3 w-75">
                     <label className="form-label">Categoria</label>
-                    <div className="d-flex flex-wrap gap-3">
+                    <div className="d-flex flex-wrap gap-2">
                         {CATEGORY_OPTIONS.map(opt => (
                             <div key={opt} className="form-check">
                                 <input
@@ -101,18 +135,15 @@ export default function AddGamePage() {
                                     onChange={() => handleCheckboxChange(opt, category, setCategory)}
                                     className="form-check-input"
                                 />
-                                <label htmlFor={`category-${opt}`} className="form-check-label">
-                                    {opt}
-                                </label>
+                                <label htmlFor={`category-${opt}`} className="form-check-label">{opt}</label>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Piattaforme */}
-                <div className="mb-3">
+                <div className="mb-3 w-75">
                     <label className="form-label">Piattaforme</label>
-                    <div className="d-flex flex-wrap gap-3">
+                    <div className="d-flex flex-wrap gap-2">
                         {PLATFORM_OPTIONS.map(opt => (
                             <div key={opt} className="form-check">
                                 <input
@@ -122,17 +153,14 @@ export default function AddGamePage() {
                                     onChange={() => handleCheckboxChange(opt, platform, setPlatform)}
                                     className="form-check-input"
                                 />
-                                <label htmlFor={`platform-${opt}`} className="form-check-label">
-                                    {opt}
-                                </label>
+                                <label htmlFor={`platform-${opt}`} className="form-check-label">{opt}</label>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* Anno di uscita */}
-                <div className="mb-3">
-                    <label htmlFor="releaseYear" className="form-label">Anno di uscita</label>
+                <div className="mb-3 w-75">
+                    <label htmlFor="releaseYear" className="form-label">Anno di uscita *</label>
                     <input
                         type="number"
                         id="releaseYear"
@@ -140,11 +168,11 @@ export default function AddGamePage() {
                         onChange={(e) => setReleaseYear(e.target.value)}
                         className="form-control"
                     />
+                    {releaseYearError && <p className="text-danger m-0 small">{releaseYearError}</p>}
                 </div>
 
-                {/* Rating */}
-                <div className="mb-3">
-                    <label htmlFor="rating" className="form-label">Rating (da 1 a 10)</label>
+                <div className="mb-3 w-75">
+                    <label htmlFor="rating" className="form-label">Rating (1-10) *</label>
                     <input
                         type="number"
                         id="rating"
@@ -154,11 +182,11 @@ export default function AddGamePage() {
                         onChange={(e) => setRating(e.target.value)}
                         className="form-control"
                     />
+                    {ratingError && <p className="text-danger m-0 small">{ratingError}</p>}
                 </div>
 
-                {/* Developer */}
-                <div className="mb-3">
-                    <label htmlFor="developer" className="form-label">Sviluppatore</label>
+                <div className="mb-3 w-75">
+                    <label htmlFor="developer" className="form-label">Sviluppatore *</label>
                     <input
                         type="text"
                         id="developer"
@@ -166,11 +194,11 @@ export default function AddGamePage() {
                         onChange={(e) => setDeveloper(e.target.value)}
                         className="form-control"
                     />
+                    {developerError && <p className="text-danger m-0 small">{developerError}</p>}
                 </div>
 
-                {/* Prezzo */}
-                <div className="mb-3">
-                    <label htmlFor="price" className="form-label">Prezzo (€)</label>
+                <div className="mb-3 w-75">
+                    <label htmlFor="price" className="form-label">Prezzo (€) *</label>
                     <input
                         type="number"
                         id="price"
@@ -178,12 +206,12 @@ export default function AddGamePage() {
                         onChange={(e) => setPrice(e.target.value)}
                         className="form-control"
                     />
+                    {priceError && <p className="text-danger m-0 small">{priceError}</p>}
                 </div>
 
-                {/* Giocatori */}
-                <div className="mb-3">
+                <div className="mb-3 w-75">
                     <label className="form-label">Modalità di Gioco</label>
-                    <div className="d-flex flex-wrap gap-3">
+                    <div className="d-flex flex-wrap gap-2">
                         {PLAYER_OPTIONS.map(opt => (
                             <div key={opt} className="form-check">
                                 <input
@@ -193,17 +221,14 @@ export default function AddGamePage() {
                                     onChange={() => handleCheckboxChange(opt, players, setPlayers)}
                                     className="form-check-input"
                                 />
-                                <label htmlFor={`players-${opt}`} className="form-check-label">
-                                    {opt}
-                                </label>
+                                <label htmlFor={`players-${opt}`} className="form-check-label">{opt}</label>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                {/* PEGI */}
-                <div className="mb-3">
-                    <label htmlFor="ageRating" className="form-label">Classificazione PEGI</label>
+                <div className="mb-3 w-75">
+                    <label htmlFor="ageRating" className="form-label">Classificazione PEGI *</label>
                     <select
                         id="ageRating"
                         value={ageRating}
@@ -215,12 +240,12 @@ export default function AddGamePage() {
                             <option key={opt} value={opt}>{opt}</option>
                         ))}
                     </select>
+                    {ageRatingError && <p className="text-danger m-0 small">{ageRatingError}</p>}
                 </div>
 
-                {/* Regioni */}
-                <div className="mb-3">
+                <div className="mb-3 w-75">
                     <label className="form-label">Disponibile in Regione</label>
-                    <div className="d-flex flex-wrap gap-3">
+                    <div className="d-flex flex-wrap gap-2">
                         {REGION_OPTIONS.map(opt => (
                             <div key={opt} className="form-check">
                                 <input
@@ -230,26 +255,28 @@ export default function AddGamePage() {
                                     onChange={() => handleCheckboxChange(opt, regionAvailability, setRegionAvailability)}
                                     className="form-check-input"
                                 />
-                                <label htmlFor={`region-${opt}`} className="form-check-label">
-                                    {opt}
-                                </label>
+                                <label htmlFor={`region-${opt}`} className="form-check-label">{opt}</label>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="form-control"
-                    rows="4"
-                />
+                <div className="mb-3 w-75">
+                    <label htmlFor="description" className="form-label">Descrizione *</label>
+                    <textarea
+                        id="description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="form-control"
+                        rows="4"
+                    />
+                    {descriptionError && <p className="text-danger m-0 small">{descriptionError}</p>}
+                </div>
 
                 <button
                     type="submit"
-                    disabled={!!titleError}
-                    className="btn btn-success mt-3"
+                    disabled={!formValid}
+                    className="btn btn-outline-primary btn-sm w-50"
                 >
                     Aggiungi Gioco
                 </button>
