@@ -4,10 +4,17 @@ import { GlobalContext } from "../Context/GlobalContext";
 
 export default function GameDetail() {
   const { id } = useParams();
-  const { fetchGameById } = useContext(GlobalContext);
+  const { fetchGameById, addFavorite, removeFavorite, isFavorite } = useContext(GlobalContext);
   const [game, setGame] = useState(null);
   const [error, setError] = useState(null);
-  const { addFavorite, removeFavorite, isFavorite } = useContext(GlobalContext);
+
+  const isFav = isFavorite(game.id);
+
+  // Funzione per gestire i valori nulli o mancanti
+  const displayValue = (value, fallback = "N/A") => value || fallback;
+
+  // Funzione per gestire il prezzo
+  const displayPrice = (price) => (price ? `${price}€` : "N/A");
 
   useEffect(() => {
     const loadGame = async () => {
@@ -24,18 +31,6 @@ export default function GameDetail() {
 
   if (error) return <h2>Errore: {error}</h2>;
   if (!game) return <h2>Caricamento in corso...</h2>;
-
-  const isFav = isFavorite(game.id);
-
-  // Funzione per gestire i valori nulli o mancanti
-  const displayValue = (value, fallback = "N/A") => {
-    return value ? value : fallback;
-  };
-
-  // Gestione del prezzo
-  const displayPrice = (price) => {
-    return price ? `${price}€` : "N/A";
-  };
 
   return (
     <div className="container card mt-2 pt-5 bg-dark text-white">
@@ -61,4 +56,4 @@ export default function GameDetail() {
       </div>
     </div>
   );
-};
+}
