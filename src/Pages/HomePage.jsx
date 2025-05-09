@@ -92,11 +92,6 @@ export default function HomePage() {
         }
     }, [gamesToCompare]);
 
-    // Modifica gioco
-    const handleEditGame = (game) => {
-        console.log("Modifica il gioco", game);
-    };
-
     // Elimina gioco
     const handleDeleteGame = async (id) => {
         if (window.confirm("Sei sicuro di voler eliminare questo gioco?")) {
@@ -106,7 +101,6 @@ export default function HomePage() {
         }
     };
 
-    // Mostra errore se c'è un problema nel caricamento
     if (error) {
         return <div className="text-danger text-center mt-5 pt-5">Errore nel caricamento dei giochi</div>;
     }
@@ -147,7 +141,6 @@ export default function HomePage() {
                     games={filteredAndSortedGames}
                     toggleCompare={toggleCompare}
                     gamesToCompare={gamesToCompare}
-                    onEdit={handleEditGame}
                     onDelete={handleDeleteGame}
                 />
             ) : (
@@ -172,4 +165,4 @@ export default function HomePage() {
             )}
         </div>
     );
-};
+}
