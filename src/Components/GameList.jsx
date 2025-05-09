@@ -18,6 +18,6 @@ function GamesList({ games, toggleCompare, gamesToCompare, onDelete}) {
       </div>
     </div>
   );
-};
+}
 
 export default React.memo(GamesList);

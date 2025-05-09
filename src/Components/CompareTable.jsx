@@ -1,6 +1,4 @@
-import { memo } from "react";
-
-const CompareTable = memo(({ games, removeFromCompare }) => {
+export default function CompareTable({ games, removeFromCompare }) {
   if (!games.length) return null; // Non mostro la tabella se non ci sono giochi da confrontare
 
   return (
@@ -12,8 +10,7 @@ const CompareTable = memo(({ games, removeFromCompare }) => {
             <th key={game.id} className="position-relative">
               {game.title}
               <button
-                className="btn-close bg-danger position-absolute top-0 end-0 m-2"
-                onClick={() => removeFromCompare(game.id)}
+                className="btn-close bg-danger position-absolute top-0 end-0 m-2" onClick={() => removeFromCompare(game.id)}
               ></button>
             </th>
           ))}
@@ -87,6 +84,4 @@ const CompareTable = memo(({ games, removeFromCompare }) => {
       </tbody>
     </table>
   );
-});
-
-export default CompareTable;
+}

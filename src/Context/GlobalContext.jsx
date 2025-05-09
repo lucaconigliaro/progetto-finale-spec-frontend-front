@@ -29,4 +29,4 @@ export default function GlobalProvider({ children }) {
             {children}
         </GlobalContext.Provider>
     );
-};
+}

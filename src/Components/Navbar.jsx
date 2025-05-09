@@ -4,14 +4,12 @@ import FavoritesSidebar from "./FavoritesSidebar";
 
 export default function NavBar() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+    const openSidebar = () => setIsSidebarOpen(true);    // Apri Sidebar
+    const closeSidebar = () => setIsSidebarOpen(false); // Chiudi Sidebar
     const navLinks = [
         { path: "/", title: "Giochi" },
         { path:"/add", title: "Aggiungi un gioco"}
     ];
-
-    const openSidebar = () => setIsSidebarOpen(true);
-    const closeSidebar = () => setIsSidebarOpen(false);
 
     return (
         <>

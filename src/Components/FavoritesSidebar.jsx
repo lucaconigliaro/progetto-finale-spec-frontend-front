@@ -41,11 +41,7 @@ export default function FavoritesSidebar({ isOpen, onClose }) {
                             {favorites.map((game) => (
                                 <li key={game.id} className="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
                                     <Link to={`/games/${game.id}`} className="text-decoration-none text-white">{game.title}</Link>
-                                    <button
-                                        className="btn-close bg-danger"
-                                        onClick={() => removeFavorite(game.id)}
-                                    >
-                                    </button>
+                                    <button className="btn-close bg-danger" onClick={() => removeFavorite(game.id)}/>
                                 </li>
                             ))}
                         </ul>
@@ -54,4 +50,4 @@ export default function FavoritesSidebar({ isOpen, onClose }) {
             </div>
         </div>
     );
-};
+}
