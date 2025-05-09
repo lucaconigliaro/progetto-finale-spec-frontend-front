@@ -73,7 +73,7 @@ const CompareTable = memo(({ games, removeFromCompare }) => {
           {games.map((g) => (
             <td key={g.id}>
               {Array.isArray(g.regionAvailability)
-                ? g.regionAvailability.join(", ")
+                ? g.regionAvailability.join(", ") || "-"
                 : "-"}
             </td>
           ))}

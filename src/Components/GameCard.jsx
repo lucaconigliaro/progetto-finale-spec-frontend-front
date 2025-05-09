@@ -108,12 +108,6 @@ function GameCard({ game, toggleCompare, gamesToCompare, onEdit, onDelete }) {
               style={{ zIndex: 2 }}
             >
               <button
-                onClick={() => onEdit(game)} // Modifica gioco
-                className="btn btn-outline-secondary btn-sm mb-2"
-              >
-                Modifica
-              </button>
-              <button
                 onClick={() => onDelete(game.id)} // Elimina gioco
                 className="btn btn-outline-danger btn-sm"
               >

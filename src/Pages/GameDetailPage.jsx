@@ -28,13 +28,13 @@ export default function GameDetail() {
   const isFav = isFavorite(game.id);
 
   // Funzione per gestire i valori nulli o mancanti
-  const displayValue = (value, fallback = "Non disponibile") => {
+  const displayValue = (value, fallback = "N/A") => {
     return value ? value : fallback;
   };
 
   // Gestione del prezzo
   const displayPrice = (price) => {
-    return price ? `${price}€` : "Non disponibile";
+    return price ? `${price}€` : "N/A";
   };
 
   return (
@@ -49,7 +49,7 @@ export default function GameDetail() {
         <p><strong>Prezzo:</strong> {displayPrice(game.price)}</p>
         <p><strong>Giocatori:</strong> {displayValue(game.players)}</p>
         <p><strong>Età consigliata:</strong> {displayValue(game.ageRating)}</p>
-        <p><strong>Disponibilità:</strong> {displayValue(game.regionAvailability?.join(", "), "N/A")}</p>
+        <p><strong>Disponibilità:</strong> {displayValue(game.regionAvailability?.join(", "))}</p>
         <p><strong>Descrizione:</strong> {displayValue(game.description)}</p>
       </div>
       <div>
