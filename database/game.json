@@ -1,0 +1,195 @@
+[
+  {
+    "id": 1,
+    "title": "The Witcher 3: Wild Hunt",
+    "category": "RPG",
+    "platform": "PC, PS4, Xbox One, Switch",
+    "releaseYear": 2015,
+    "rating": 9,
+    "developer": "CD Projekt Red",
+    "price": 40,
+    "players": "Single-player",
+    "ageRating": "PEGI 18",
+    "regionAvailability": [
+      "NA",
+      "EU"
+    ],
+    "description": "Un gioco di ruolo open-world ambientato in un universo fantasy oscuro, in cui il protagonista Geralt di Rivia, un cacciatore di mostri, deve affrontare pericoli e misteri per salvare la sua figlia adottiva.",
+    "createdAt": "2015-05-19T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Fortnite",
+    "category": "Battle Royale",
+    "platform": "PC, PS4, Xbox One, Switch, Mobile",
+    "releaseYear": 2017,
+    "rating": 8,
+    "developer": "Epic Games",
+    "price": 0,
+    "players": "Multiplayer",
+    "ageRating": "PEGI 12",
+    "regionAvailability": [
+      "NA",
+      "EU"
+    ],
+    "description": "Un popolare gioco battle royale dove i giocatori combattono fino a che non ne resta uno solo. I giocatori possono costruire strutture per difendersi o sopraffare gli avversari.",
+    "createdAt": "2017-07-25T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 3,
+    "title": "Minecraft",
+    "category": "Sandbox",
+    "platform": "PC, PS4, Xbox One, Switch, Mobile",
+    "releaseYear": 2011,
+    "rating": 10,
+    "developer": "Mojang Studios",
+    "price": 20,
+    "players": "Single-player, Multiplayer",
+    "ageRating": "PEGI 7",
+    "regionAvailability": [
+      "NA",
+      "EU",
+      "ASIA"
+    ],
+    "description": "Un gioco sandbox dove i giocatori possono costruire, esplorare e sopravvivere in un mondo di blocchi, raccogliendo risorse e affrontando creature pericolose.",
+    "createdAt": "2011-11-18T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 4,
+    "title": "The Last of Us Part II",
+    "category": "Action-Adventure",
+    "platform": "PS4",
+    "releaseYear": 2020,
+    "rating": 9,
+    "developer": "Naughty Dog",
+    "price": 60,
+    "players": "Single-player",
+    "ageRating": "PEGI 18",
+    "regionAvailability": [
+      "NA",
+      "EU"
+    ],
+    "description": "Un gioco d'azione-avventura che segue Ellie, un'adolescente che deve affrontare la violenza, la vendetta e la perdita in un mondo post-apocalittico.",
+    "createdAt": "2020-06-19T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 5,
+    "title": "Cyberpunk 2077",
+    "category": "RPG",
+    "platform": "PC, PS4, Xbox One, PS5, Xbox Series X/S",
+    "releaseYear": 2020,
+    "rating": 7,
+    "developer": "CD Projekt Red",
+    "price": 50,
+    "players": "Single-player",
+    "ageRating": "PEGI 18",
+    "regionAvailability": [
+      "NA",
+      "EU"
+    ],
+    "description": "Un gioco di ruolo open-world ambientato in un futuro distopico dove i giocatori assumono il ruolo di un mercenario in una megalopoli piena di tecnologia avanzata, corruzione e pericoli.",
+    "createdAt": "2020-12-10T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 6,
+    "title": "Red Dead Redemption 2",
+    "category": "Action-Adventure",
+    "platform": "PC, PS4, Xbox One",
+    "releaseYear": 2018,
+    "rating": 9,
+    "developer": "Rockstar Games",
+    "price": 60,
+    "players": "Single-player, Multiplayer",
+    "ageRating": "PEGI 18",
+    "regionAvailability": [
+      "NA",
+      "EU"
+    ],
+    "description": "Un gioco d'azione-avventura open-world che segue la vita di un fuorilegge nell'America selvaggia, esplorando tematiche di moralità e sopravvivenza.",
+    "createdAt": "2018-10-26T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 7,
+    "title": "Among Us",
+    "category": "Party, Multiplayer",
+    "platform": "PC, Mobile, Switch",
+    "releaseYear": 2018,
+    "rating": 8,
+    "developer": "Innersloth",
+    "price": 5,
+    "players": "Multiplayer",
+    "ageRating": "PEGI 7",
+    "regionAvailability": [
+      "NA",
+      "EU",
+      "ASIA"
+    ],
+    "description": "Un gioco multiplayer dove i giocatori collaborano per completare attività, mentre cercano di scoprire chi tra loro è un impostore che saboterà i loro sforzi.",
+    "createdAt": "2018-06-15T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 8,
+    "title": "Assassin's Creed Valhalla",
+    "category": "Action-Adventure",
+    "platform": "PC, PS4, Xbox One, PS5, Xbox Series X/S",
+    "releaseYear": 2020,
+    "rating": 8,
+    "developer": "Ubisoft",
+    "price": 60,
+    "players": "Single-player",
+    "ageRating": "PEGI 18",
+    "regionAvailability": [
+      "NA",
+      "EU"
+    ],
+    "description": "Un gioco open-world d'azione-avventura ambientato nell'era vichinga. I giocatori vestono i panni di Eivor, un guerriero vichingo, in un'epoca di conquista e esplorazione.",
+    "createdAt": "2020-11-10T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 9,
+    "title": "League of Legends",
+    "category": "MOBA",
+    "platform": "PC",
+    "releaseYear": 2009,
+    "rating": 9,
+    "developer": "Riot Games",
+    "price": 0,
+    "players": "Multiplayer",
+    "ageRating": "PEGI 12",
+    "regionAvailability": [
+      "NA",
+      "EU",
+      "ASIA"
+    ],
+    "description": "Un gioco multiplayer online competitivo dove due squadre di giocatori combattono per distruggere il Nexus avversario, utilizzando eroi con abilità uniche.",
+    "createdAt": "2009-10-27T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  },
+  {
+    "id": 10,
+    "title": "Call of Duty: Warzone",
+    "category": "Battle Royale",
+    "platform": "PC, PS4, Xbox One",
+    "releaseYear": 2020,
+    "rating": 8,
+    "developer": "Infinity Ward",
+    "price": 60,
+    "players": "Multiplayer",
+    "ageRating": "PEGI 16",
+    "regionAvailability": [
+      "NA",
+      "EU"
+    ],
+    "description": "Un gioco battle royale ambientato nell'universo di Call of Duty, dove i giocatori competono in una mappa sempre più piccola per sopravvivere fino alla fine.",
+    "createdAt": "2020-03-10T00:00:00Z",
+    "updatedAt": "2025-05-07T00:00:00Z"
+  }
+]
