@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
+
 export default function CompareTable({ games, removeFromCompare }) {
-  if (!games.length) return null; // Non mostro la tabella se non ci sono giochi da confrontare
+  if (!games.length) return null;
 
   return (
     <table className="table table-dark table-hover table-bordered table-striped mt-4">
@@ -8,9 +10,15 @@ export default function CompareTable({ games, removeFromCompare }) {
           <th>Gioco</th>
           {games.map(game => (
             <th key={game.id} className="position-relative">
-              {game.title}
+              <Link
+                to={`/games/${game.id}`}
+                className="text-decoration-none table-hover fw-bold text-warning"
+              >
+                {game.title}
+              </Link>
               <button
-                className="btn-close bg-danger position-absolute top-0 end-0 m-2" onClick={() => removeFromCompare(game.id)}
+                className="btn-close bg-danger position-absolute top-0 end-0 m-2"
+                onClick={() => removeFromCompare(game.id)}
               ></button>
             </th>
           ))}

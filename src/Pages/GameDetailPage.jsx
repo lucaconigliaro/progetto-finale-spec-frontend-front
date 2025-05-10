@@ -27,8 +27,18 @@ export default function GameDetail() {
     loadGame();
   }, [id]);
 
-  if (error) return <h2>Errore: {error}</h2>;
-  if (!game) return <h2>Caricamento in corso...</h2>;
+  if (error) {
+    return (
+      <div className="container mt-5 pt-5 text-center">
+        <div className="alert alert-danger" role="alert">
+          <h2>{error}</h2>
+          <p>Controlla l'URL o torna alla <a href="/" className="alert-link">Home</a>.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!game) return <h2 className="text-center mt-5">Caricamento in corso...</h2>;
 
   const isFav = isFavorite(game.id);
 
