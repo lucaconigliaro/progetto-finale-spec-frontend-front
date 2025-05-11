@@ -98,15 +98,17 @@ export default function AddGamePage() {
         const newGame = {
             title: format(title),
             category: category.join(", "),
-            platform: platform.join(", "),
-            releaseYear: Number(releaseYear),
-            rating: Number(rating),
-            developer: format(developer),
-            price: Number(price),
-            players: players.join(", "),
-            ageRating,
-            regionAvailability,
-            description: format(description)
+            details: {
+                platform: platform,
+                releaseYear: Number(releaseYear),
+                rating: Number(rating),
+                developer: format(developer),
+                price: Number(price),
+                players: players,
+                ageRating,
+                regionAvailability,
+                description: format(description)
+            }
         };
 
         try {

@@ -47,15 +47,15 @@ export default function GameDetail() {
       <div className="card-body">
         <h2 className="card-title">{displayValue(game.title)}</h2>
         <p><strong>Categoria:</strong> {displayValue(game.category)}</p>
-        <p><strong>Piattaforma:</strong> {displayValue(game.platform)}</p>
-        <p><strong>Anno:</strong> {displayValue(game.releaseYear)}</p>
-        <p><strong>Rating:</strong> {displayValue(game.rating)}</p>
-        <p><strong>Sviluppatore:</strong> {displayValue(game.developer)}</p>
-        <p><strong>Prezzo:</strong> {displayPrice(game.price)}</p>
-        <p><strong>Giocatori:</strong> {displayValue(game.players)}</p>
-        <p><strong>Età consigliata:</strong> {displayValue(game.ageRating)}</p>
-        <p><strong>Disponibilità:</strong> {displayValue(game.regionAvailability?.join(", "))}</p>
-        <p><strong>Descrizione:</strong> {displayValue(game.description)}</p>
+        <p><strong>Piattaforma:</strong> {displayValue(game.details.platform.join(", "))}</p>
+        <p><strong>Anno:</strong> {displayValue(game.details.releaseYear)}</p>
+        <p><strong>Rating:</strong> {displayValue(game.details.rating)}</p>
+        <p><strong>Sviluppatore:</strong> {displayValue(game.details.developer)}</p>
+        <p><strong>Prezzo:</strong> {displayPrice(game.details.price)}</p>
+        <p><strong>Giocatori:</strong> {displayValue(game.details.players.join(", "))}</p>
+        <p><strong>Età consigliata:</strong> {displayValue(game.details.ageRating)}</p>
+        <p><strong>Disponibilità:</strong> {displayValue(game.details.regionAvailability.join(", "))}</p>
+        <p><strong>Descrizione:</strong> {displayValue(game.details.description)}</p>
       </div>
       <div>
         <button

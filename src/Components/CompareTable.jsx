@@ -27,66 +27,74 @@ export default function CompareTable({ games, removeFromCompare }) {
       <tbody>
         <tr>
           <td>Categoria</td>
-          {games.map((g) => (
+          {games.map(g => (
             <td key={g.id}>{g.category || "-"}</td>
           ))}
         </tr>
         <tr>
           <td>Piattaforma</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.platform || "-"}</td>
+          {games.map(g => (
+            <td key={g.id}>
+              {Array.isArray(g.details.platform)
+                ? g.details.platform.join(", ") || "-"
+                : "-"}
+            </td>
           ))}
         </tr>
         <tr>
           <td>Anno di rilascio</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.releaseYear || "-"}</td>
+          {games.map(g => (
+            <td key={g.id}>{g.details.releaseYear || "-"}</td>
           ))}
         </tr>
         <tr>
           <td>Rating</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.rating || "-"}</td>
+          {games.map(g => (
+            <td key={g.id}>{g.details.rating || "-"}</td>
           ))}
         </tr>
         <tr>
           <td>Sviluppatore</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.developer || "-"}</td>
+          {games.map(g => (
+            <td key={g.id}>{g.details.developer || "-"}</td>
           ))}
         </tr>
         <tr>
           <td>Prezzo</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.price ? `${g.price}€` : "Gratis"}</td>
+          {games.map(g => (
+            <td key={g.id}>{g.details.price ? `${g.details.price}€` : "Gratis"}</td>
           ))}
         </tr>
         <tr>
           <td>Giocatori</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.players || "-"}</td>
+          {games.map(g => (
+            <td key={g.id}>
+              {Array.isArray(g.details.players)
+                ? g.details.players.join(", ") || "-"
+                : "-"}
+            </td>
           ))}
         </tr>
         <tr>
           <td>Età consigliata</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.ageRating || "-"}</td>
+          {games.map(g => (
+            <td key={g.id}>{g.details.ageRating || "-"}</td>
           ))}
         </tr>
         <tr>
           <td>Disponibilità</td>
-          {games.map((g) => (
+          {games.map(g => (
             <td key={g.id}>
-              {Array.isArray(g.regionAvailability)
-                ? g.regionAvailability.join(", ") || "-"
+              {Array.isArray(g.details.regionAvailability)
+                ? g.details.regionAvailability.join(", ") || "-"
                 : "-"}
             </td>
           ))}
         </tr>
         <tr>
           <td>Descrizione</td>
-          {games.map((g) => (
-            <td key={g.id}>{g.description || "-"}</td>
+          {games.map(g => (
+            <td key={g.id}>{g.details?.description || "-"}</td>
           ))}
         </tr>
       </tbody>
