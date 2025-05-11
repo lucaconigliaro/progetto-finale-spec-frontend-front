@@ -11,7 +11,7 @@ const PLATFORM_OPTIONS = ["Mobile", "PC", "PS4", "PS5", "Switch", "Xbox One", "X
 export default function AddGamePage() {
     // Stato per i campi del modulo
     const [title, setTitle] = useState("");
-    const [category, setCategory] = useState([]);
+    const [category, setCategory] = useState("");
     const [players, setPlayers] = useState([]);
     const [platform, setPlatform] = useState([]);
     const [releaseYear, setReleaseYear] = useState("");
@@ -97,7 +97,7 @@ export default function AddGamePage() {
 
         const newGame = {
             title: format(title),
-            category: category.join(", "),
+            category: category,
             details: {
                 platform: platform,
                 releaseYear: Number(releaseYear),
@@ -138,23 +138,20 @@ export default function AddGamePage() {
                     {titleError && <p className="text-danger m-0 small">{titleError}</p>}
                 </div>
 
-                {/* Checkbox per le categorie */}
+                {/* Select per la categoria */}
                 <div className="mb-3 w-75">
-                    <label className="form-label">Categoria</label>
-                    <div className="d-flex flex-wrap gap-2">
+                    <label htmlFor="category" className="form-label">Categoria</label>
+                    <select
+                        id="category"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="form-control"
+                    >
+                        <option value="">Seleziona una categoria</option>
                         {CATEGORY_OPTIONS.map(opt => (
-                            <div key={opt} className="form-check">
-                                <input
-                                    type="checkbox"
-                                    id={`category-${opt}`}
-                                    checked={category.includes(opt)}
-                                    onChange={() => handleCheckboxChange(opt, category, setCategory)}
-                                    className="form-check-input"
-                                />
-                                <label htmlFor={`category-${opt}`} className="form-check-label">{opt}</label>
-                            </div>
+                            <option key={opt} value={opt}>{opt}</option>
                         ))}
-                    </div>
+                    </select>
                 </div>
 
                 {/* Checkbox per le piattaforme */}
