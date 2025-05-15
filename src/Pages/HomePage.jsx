@@ -135,6 +135,7 @@ export default function HomePage() {
                     Categoria {sortBy === "category" && (sortOrder === 1 ? "A-Z ↑" : "Z-A ↓")}
                 </button>
             </div>
+            <small className="text-warning">Clicca sul pulsante "Confronta" su due giochi per confrontarli</small>
 
             {filteredAndSortedGames.length > 0 ? (
                 <GameList
