@@ -17,7 +17,7 @@ export default function useGames() {
                 setGames(data);
                 setIsLoading(false);
 
-                // Estrai categorie uniche in modo semplice
+                // Estrae le categorie
                 const categories = [];
                 data.forEach((game) => {
                     if (!categories.includes(game.category)) {

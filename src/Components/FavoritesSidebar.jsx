@@ -3,7 +3,7 @@ import { GlobalContext } from "../Context/GlobalContext";
 import { Link } from "react-router-dom";
 
 export default function FavoritesSidebar({ isOpen, onClose }) {
-    const { favorites, removeFavorite } = useContext(GlobalContext);
+    const { favorites, removeFavorite } = useContext(GlobalContext); //useFavorites
     
     return (
         <div>

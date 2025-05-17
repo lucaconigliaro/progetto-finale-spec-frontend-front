@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { GlobalContext } from "../Context/GlobalContext";
 
 function GameCard({ game, toggleCompare, gamesToCompare, onDelete }) {
-  const { addFavorite, removeFavorite, isFavorite } = useContext(GlobalContext);
+  const { addFavorite, removeFavorite, isFavorite } = useContext(GlobalContext); // useFavorites
   const [showOptions, setShowOptions] = useState(false);
   const cardRef = useRef(null);
 
   const isSelected = gamesToCompare.some(g => g.id === game.id);    // Selezione del comparatore
   const disableCompare = gamesToCompare.length >= 2 && !isSelected; // Se ci sono 2 giochi, disabilita i bottoni
-  const isFav = isFavorite(game.id);
+  const isFav = isFavorite(game.id); // Controlla se il gioco è nei preferiti
 
   const toggleOptions = () => setShowOptions(!showOptions); // Bottone opzioni
   const handleCancelClick = () => setShowOptions(false);   // Chiudi opzioni

@@ -75,7 +75,7 @@ export default function AddGamePage() {
         return "";
     }, [ageRating]);
 
-    // Controllo se il modulo è valido
+    // Controlla se il modulo è valido
     const formValid = [titleError, developerError, ratingError, priceError, releaseYearError, descriptionError, ageRatingError].every(err => !err);
 
     // Gestione dei checkbox
@@ -92,7 +92,7 @@ export default function AddGamePage() {
         e.preventDefault();
         if (!formValid) return;
 
-        // Formattazione del testo (es. capitalizzazione)
+        // Formattazione del testo
         const format = (text) => text.trim().replace(/^(\w)/, (_, c) => c.toUpperCase());
 
         const newGame = {
@@ -306,4 +306,4 @@ export default function AddGamePage() {
             </form>
         </div>
     );
-};
+}

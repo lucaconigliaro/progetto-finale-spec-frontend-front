@@ -40,6 +40,7 @@ export default function GameDetail() {
 
   if (!game) return <h2 className="text-center mt-5">Caricamento in corso...</h2>;
 
+  // Controlla se un gioco è presente nei preferiti
   const isFav = isFavorite(game.id);
 
   return (
