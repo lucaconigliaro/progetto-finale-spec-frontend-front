@@ -14,7 +14,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/add" element={<AddGamePage />} />
             <Route path="/games/:id" element={<GameDetailPage />} />
-            <Route path="*" element={<h1>404 - Pagina non trovata</h1>} />
+            <Route path="*" element={<h1 className='container pt-5 mt-5 text-white'>404 - Pagina non trovata</h1>} />
           </Route>
         </Routes>
       </BrowserRouter>
