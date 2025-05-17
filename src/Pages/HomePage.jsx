@@ -72,15 +72,16 @@ export default function HomePage() {
         let filtered = games.filter(game =>
             game.title.toLowerCase().includes(searchGame.toLowerCase())
         );
-
         if (selectedCategory !== "Tutti") {
             filtered = filtered.filter(game => game.category === selectedCategory);
         }
-
         return filtered.sort((a, b) => {
             let comparison = 0;
-            if (sortBy === "title") comparison = a.title.localeCompare(b.title);
-            else if (sortBy === "category") comparison = a.category.localeCompare(b.category);
+            if (sortBy === "title") {
+                comparison = a.title.localeCompare(b.title);
+            } else if (sortBy === "category") {
+                comparison = a.category.localeCompare(b.category);
+            }
             return comparison * sortOrder;
         });
     }, [games, searchGame, selectedCategory, sortBy, sortOrder]);
