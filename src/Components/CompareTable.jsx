@@ -62,7 +62,7 @@ export default function CompareTable({ games, removeFromCompare }) {
         <tr>
           <td>Prezzo</td>
           {games.map(g => (
-            <td key={g.id}>{g.details.price ? `${g.details.price}€` : "Gratis"}</td>
+            <td key={g.id}>{g.details.price ? `${g.details.price}€` : "Free to Play"}</td>
           ))}
         </tr>
         <tr>

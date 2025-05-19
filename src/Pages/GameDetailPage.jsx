@@ -12,7 +12,7 @@ export default function GameDetail() {
   const displayValue = (value, fallback = "N/A") => value || fallback;
 
   // Funzione per gestire il prezzo
-  const displayPrice = (price) => (price ? `${price}€` : "N/A");
+  const displayPrice = (price) => (price ? `${price}€` : "Free to Play");
 
   useEffect(() => {
     const loadGame = async () => {
