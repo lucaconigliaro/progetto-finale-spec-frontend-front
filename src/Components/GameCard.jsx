@@ -5,7 +5,6 @@ import { GlobalContext } from "../Context/GlobalContext";
 function GameCard({ game, toggleCompare, gamesToCompare, onDelete }) {
   const { addFavorite, removeFavorite, isFavorite } = useContext(GlobalContext); // useFavorites
   const [showOptions, setShowOptions] = useState(false);
-  const cardRef = useRef(null);
 
   const isSelected = gamesToCompare.some(g => g.id === game.id);    // Selezione del comparatore
   const disableCompare = gamesToCompare.length >= 2 && !isSelected; // Se ci sono 2 giochi, disabilita i bottoni
@@ -16,8 +15,7 @@ function GameCard({ game, toggleCompare, gamesToCompare, onDelete }) {
  
 
   return (
-    <div 
-      ref={cardRef} className="card h-100 border-0 shadow small bg-dark text-white" style={{ position: "relative" }}>
+    <div className="card h-100 border-0 shadow small bg-dark text-white" style={{ position: "relative" }}>
       <div className="card-body p-4 d-flex flex-column text-center">
         <strong className="text-truncate" title={game.title}>{game.title}</strong>
         <span className="text-white text-truncate mb-4" title={game.category}>{game.category}</span>
