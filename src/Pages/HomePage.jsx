@@ -58,14 +58,14 @@ export default function HomePage() {
     }, []);
 
     // Gestisce l'ordinamento dei giochi
-    const handleSort = useCallback(field => {
+    const handleSort = (field) => {
         if (sortBy === field) {
-            setSortOrder(prev => prev * -1);
+          setSortOrder(prev => prev * -1);
         } else {
-            setSortBy(field);
-            setSortOrder(1);
+          setSortBy(field);
+          setSortOrder(1);
         }
-    }, [sortBy]);
+      };
 
     // Filtra e ordina i giochi
     const filteredAndSortedGames = useMemo(() => {
